@@ -43,6 +43,7 @@ app.get('/',(req,res)=>{
   });
 });
 
+//Get all Surveys in json format API
 app.get('/all',(req,res)=>{
   MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
       const db = client.db(dbName);
@@ -67,10 +68,12 @@ app.get('/all',(req,res)=>{
   });
 });
 
-
+//New Survey Forntend
 app.get('/NewSurvey',(req,res)=>{
   res.render('newsurvey');
 });
+
+//New Survey API
 app.post('/NewSurvey',(req,res)=>{
   
   
@@ -111,12 +114,13 @@ app.post('/NewSurvey',(req,res)=>{
   });
 });
 
-
+//Add Question Front End
 app.get('/AddQuestions/:id',(req,res)=>{
 
   res.render('addquestions',{data:req.params.id});
 });
 
+//AddQuestion APi
 app.post('/AddQuestions/:id',(req,res)=>{
 
   let questions=[];
@@ -127,7 +131,7 @@ app.post('/AddQuestions/:id',(req,res)=>{
   
 });
 
-
+//Response Front End
 app.get('/Response/:id',(req,res)=>{
 
   MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
@@ -152,6 +156,8 @@ app.get('/Response/:id',(req,res)=>{
   });  
 });
 
+
+//API to Submit the Response
 app.post('/Response/:id',(req,res)=>{
 
   //console.log(req.params.id);
@@ -226,11 +232,13 @@ app.get('/Result/:id',(req,res)=>{
   });
 });
 
+//Random Survey ID
 function GetRandomID()
 {
   return (Math.random().toString(36)).substring(3,8);
 }
 
+//Further Step to Add the Questions
 function AddQuestionsContinue(sid,questions,req,res)
 {
   MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
