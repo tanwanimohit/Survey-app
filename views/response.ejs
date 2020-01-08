@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Servey Response</title>
+    <link rel="stylesheet" href="/form.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="contact-clean">
+        <form >
+            <h2 class="text-center"><%= data.name %></h2>
+            <input class="form-control" type="text"  placeholder="Full Name" value="<%= data.surveyId %>" id="sid" hidden>
+
+             <input class="form-control" type="text"   value="<%= data.questions.length %>" id="length" hidden>
+            <% if(data.userDetailRequired=="true") {%>
+              <div class="form-group">
+            
+              <b>User Details Needed</b>
+              
+              <input class="form-control" type="text"  placeholder="Full Name"  id="name" required>
+              <input class="form-control" type="email"  placeholder="Email-ID"  id="email"required>
+              </div>
+            <% } %>
+            <% for(var i=0; i<data.questions.length; i++) { %>
+            
+           <% if(data.questions[i].type=="text") { %>
+           <div class="form-group">
+            
+            <b><%=data.questions[i].question%></b>
+            
+            <input class="form-control" type="text"  placeholder="Type Answer here"  id="answer_<%=i%>">
+            
+            </div>
+           <%}%>
+           <%if(data.questions[i].type=="truefalse"){%>
+           <div class="form-group"><b><%=data.questions[i].question%></b>
+            <br>
+            True <input  value="true" type="radio" name="answer<%=i%>"  >
+            False 
+            <input  type="radio" value="false" name="answer<%=i%>" ></div>
+
+           <%}%>
+            <% } %>
+
+            
+            <div class="form-group"><button class="btn btn-primary" type="button" onclick="Response()">Submit Response</button></div>
+        </form>
+        
+    </div>
+    
+
+    <script>
+		
+      function Response()
+      {
+
+        var length=document.getElementById('length').value;
+        var name="Anonymous";
+        if(document.getElementById('name')!=null)                name=document.getElementById('name').value;
+        var email="Anonymous";
+        if(document.getElementById('email')!=null)
+            email=document.getElementById('email').value;
+		var answers=[];
+		for(var i=0; i<length; i++)
+		{
+      answers[i]={};
+			if(document.getElementById(`answer_${i}`)){
+          answers[i].answer=document.getElementById(`answer_${i}`).value;
+      }
+      else{
+        var ans="null";
+        if(document.querySelector('input[name='+"answer"+i+']:checked')
+			!=undefined)
+			{
+			ans=document.querySelector('input[name='+"answer"+i+']:checked').value;
+			}
+			else{
+			  type="null";
+			}
+      answers[i].answer=ans;
+      }
+		}
+		console.log(answers);
+        var sid=document.getElementById('sid').value;
+		var url="/Response/"+sid;
+        
+       $.post(url,{
+         answers:JSON.stringify(answers),
+         name:name,
+         email:email
+          
+        },function(data,status){
+          alert(data.message);
+          window.open('/','_self');
+        }
+        );
+      }
+    </script>
+
+</body>
+
+</html>

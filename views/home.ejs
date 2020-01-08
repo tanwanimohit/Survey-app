@@ -1,0 +1,65 @@
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Survey it</title>
+    <link rel="stylesheet" href="form.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+
+	<center><h1>Survey it 📝</h1></center>
+  <center><p> A Quick Survey App !! 😉😉</p></center>
+  
+  <div class="container col-sm-10 ">
+  <div class=" float-right"><a class="bg-primary text-light p-2 rounded-lg" href="/NewSurvey">Create New Survey</a></div>
+  <br><br>
+  <h5>All Surveys</h5>
+  <hr>
+	<% var j=0; %>
+	<% if(data.result && data.result.length>0) { %>
+    <% for(var i=data.result.length-1; i>=0; i--) { %>
+      <div class="card bg-light text-primary p-2 m-1">
+
+      <b>Survey Name :- <%=data.result[i].name %></b>     
+			<b>Survey ID :- <%=data.result[i].surveyId %></b> 
+      Description : <%=data.result[i].description %><br>
+			Start Date : <%=data.result[i].startDate %><br>
+      End Date  : <%=data.result[i].endDate %><br>
+
+      <br>
+			<center><p class="mt-2" style="display:inline-block">
+			
+			<a class="bg-primary text-light p-2 rounded-lg" href="/AddQuestions/<%=data.result[i].surveyId %>">Add Questions</a>
+      <% if(data.result[i].questions) { %>
+
+			<a class="bg-primary text-light p-2 rounded-lg" href="/Response/<%=data.result[i].surveyId %>">View Survey</a>
+      <a class="bg-primary text-light p-2 rounded-lg" href="/Result/<%=data.result[i].surveyId %>">View Responses</a>
+      <center>
+      <% }%>
+    </p>
+		</div>
+    <% } %> 
+  <% } %>
+	<% if(!data.result) {%>
+  <center>No Surveys Found !!</center>
+	<% } %>
+	</div>
+ 
+	
+  </div>
+    
+
+
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Add Questions</title>
+    <link rel="stylesheet" href="/form.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="contact-clean">
+        <form >
+            <h2 class="text-center">Add Questions</h2>
+            <input type="text" value="<%= data %>" id="sid" hidden>
+            <div class="form-group"><input class="form-control" type="text" name="name" placeholder="Type Question here"  id="name"></div>
+			
+			<div class="form-group"><b>Choose the Question Type : </b>
+            <br>
+            True/False <input  value="truefalse" type="radio" name="type0"  >
+            Textfield 
+            <input  type="radio" value="text" name="type0" ></div>
+			<div id="extraquestion">
+			
+			</div>
+            <div class="form-group"><button class="btn btn-primary" type="button" onclick="AddQuestion()">Add More Question	</button></div>
+            <div class="form-group"><button class="btn btn-primary" type="button" onclick="AddQuestions()">Make Survey</button></div>
+        </form>
+        
+    </div>
+    
+
+    <script>
+		var count=1;
+		function AddQuestion()
+		{
+			var element=document.getElementById('extraquestion');
+			element.innerHTML+= `<div class=\"form-group\"><input class=\"form-control\" type=\"text\" name=\"name\" placeholder=\"Type Question here\" class=\"question\" id=\"name\"><\/div>\r\n\t\t\t\r\n\t\t\t<div class=\"form-group\"><b>Choose the Question Type : <\/b>\r\n            <br>\r\n            True\/False <input  value=\"truefalse\" type=\"radio\" name=\"type${count}\" >\r\n            Textfield \r\n            <input  type=\"radio\" value=\"text\" name=\"type${count}\" ><\/div>`;
+			count++;
+		}
+      function AddQuestions()
+      {
+
+        var arr=document.getElementsByClassName('form-control');
+		
+		var questions=[];
+		for(var i=0; i<arr.length; i++)
+		{
+			questions[i]={};
+			var type="truefalse";
+			if(document.querySelector('input[name='+"type"+i+']:checked')
+			!=undefined)
+			{
+			type=document.querySelector('input[name='+"type"+i+']:checked').value;
+			}
+			else{
+			  type="truefalse";
+			}
+			questions[i].question=arr[i].value;
+			questions[i].type=type;
+		}
+		console.log(questions);
+        var sid=document.getElementById('sid').value;
+		var url="/AddQuestions/"+sid;
+        
+        $.post(url,{
+          addquestions:JSON.stringify(questions)
+        },function(data,status){
+          alert(data.message);
+          window.open('/','_self');
+        }
+        );
+      }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>New Survey</title>
+    <link rel="stylesheet" href="form.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="contact-clean">
+        <form >
+            <h2 class="text-center">New Survey&nbsp;</h2>
+            
+            <div class="form-group"><input class="form-control" type="text" name="name" placeholder="Survey Name" id="name"></div>
+
+            <div class="form-group"><b>Start Date:</b><input class="form-control" type="date" name="startdate" placeholder="startdate" id="startdate"></div>
+
+            <div class="form-group"><b>End Date:</b><input class="form-control" type="date" name="enddate" placeholder="enddate" id="enddate"></div>
+
+            <div class="form-group"><b>Do you want Multiple Responses from one user : </b>
+            <br>
+            Yes <input  value="true" type="radio" name="isOneAttempt" >
+            No
+            <input  type="radio" value="false" name="isOneAttempt" ></div>
+
+            <div class="form-group"><b>Do you want User Details with the survey </b>
+            <br>
+            Yes <input  value="true" type="radio" name="userDetailRequired" >
+            No
+            <input  type="radio" value="false" name="userDetailRequired" ></div>
+
+            <div class="form-group"><textarea class="form-control" id="description" placeholder="Description" rows="14" cols="Description"></textarea></div>
+            <div class="form-group"><button class="btn btn-primary" type="button" onclick="NewSurvey()">Create new survey</button></div>
+        </form>
+        
+    </div>
+    
+
+    <script>
+
+      
+      function NewSurvey()
+      {
+
+        var name=document.getElementById('name').value;
+        var desc=document.getElementById('description').value;
+        var start=document.getElementById('startdate').value;
+        var end=document.getElementById('enddate').value;
+        var attempt="false";
+        if(document.querySelector('input[name="isOneAttempt"]:checked')
+        !=undefined)
+        {
+        attempt=document.querySelector('input[name="isOneAttempt"]:checked').value;
+        }
+        else{
+          attempt="false";
+        }
+
+        var user="false";
+        if(document.querySelector('input[name="userDetailRequired"]:checked')
+        !=undefined)
+        {
+        user=document.querySelector('input[name="userDetailRequired"]:checked').value;
+        }
+        else{
+          user="false";
+        }
+
+
+        $.post('/NewSurvey',{
+          name:name,
+          description:desc,
+          startDate:start,
+          endDate:end,
+          isOneAttempt:attempt,
+          userDetailRequired:user
+        },function(data,status){
+          alert(data.message + "\n Survey ID : "+data.seveyID);
+          window.open('/','_self');
+        }
+        );
+      }
+    </script>
+
+</body>
+
+</html>
